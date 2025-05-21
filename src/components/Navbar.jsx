@@ -11,13 +11,23 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams] = useSearchParams(location.search);
   const [searchTerm, setSearchTerm] = useState(
     searchParams.get("search") || ""
   );
 
+  // useEffect(() => {
+  //   updateURL({ searchTerm, navigate, location });
+  // }, [searchTerm]);
+
   useEffect(() => {
-    updateURL({ searchTerm, navigate, location });
+    const params = new URLSearchParams(location.search);
+    if (searchTerm) {
+      params.set("search", searchTerm);
+    } else {
+      params.delete("search");
+    }
+    navigate(`${location.pathname}?${params.toString()}`, { replace: true });
   }, [searchTerm]);
 
   const handleSubmit = (e) => {

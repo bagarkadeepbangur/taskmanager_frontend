@@ -37,14 +37,12 @@ export const formatDate = (date) => {
   
   export const updateURL = ({ searchTerm, navigate, location }) => {
     const params = new URLSearchParams();
-  
     if (searchTerm) {
       params.set("search", searchTerm);
     }
   
     const newURL = `${location?.pathname}?${params.toString()}`;
     navigate(newURL, { replace: true });
-  
     return newURL;
   };
   
