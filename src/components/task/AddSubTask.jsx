@@ -26,6 +26,7 @@ const AddSubTask = ({ open, setOpen, id }) => {
 
       setTimeout(() => {
         setOpen(false);
+        window.location.reload();
       }, 500);
     } catch (err) {
       console.log(err);

@@ -175,7 +175,7 @@ const Users = () => {
       <AddUser
         open={open}
         setOpen={setOpen}
-        // userData={selected}
+        userData={selected}
         key={new Date().getTime().toString()}
       />
 

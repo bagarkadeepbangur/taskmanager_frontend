@@ -8,8 +8,8 @@ import { toast } from "sonner";
 import { useLogoutMutation } from "../redux/slices/api/authApiSlice";
 import { logout } from "../redux/slices/authSlice";
 import { getInitials } from "../utils/index";
-// import AddUser from "./AddUser";
-// import ChangePassword from "./ChangePassword";
+import AddUser from "./AddUser";
+import ChangePassword from "./ChangePassword";
 
 const UserAvatar = () => {
   const [open, setOpen] = useState(false);
@@ -94,8 +94,8 @@ const UserAvatar = () => {
         </Menu>
       </div>
 
-      {/* <AddUser open={open} setOpen={setOpen} userData={user} /> */}
-      {/* <ChangePassword open={openPassword} setOpen={setOpenPassword} /> */}
+      <AddUser open={open} setOpen={setOpen} userData={user} />
+      <ChangePassword open={openPassword} setOpen={setOpenPassword} />
     </>
   );
 };

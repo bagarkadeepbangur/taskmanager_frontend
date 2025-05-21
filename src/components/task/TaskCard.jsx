@@ -16,7 +16,7 @@ import {
   formatDate,
 } from "../../utils/index.js";
 import UserInfo from "../UserInfo.jsx";
-import  AddSubTask  from "./AddTask.jsx";
+import  AddSubTask  from "./AddSubTask.jsx";
 import  TaskAssets  from "./TaskAssets.jsx";
 import  TaskColor  from "./TaskColor.jsx";
 import TaskDialog  from "./TaskDailog.jsx";
