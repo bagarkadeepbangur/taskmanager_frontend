@@ -1,17 +1,17 @@
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate,useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import Button from "../components/Button";
 import Loading from "../components/Loading";
 import Textbox from "../components/Textbox";
-import { useLoginMutation } from "../redux/slices/api/authApiSlice";
+import { useForgetPasswordMutation } from "../redux/slices/api/authApiSlice";
+import { useChangePasswordMutation } from "../redux/slices/api/userApiSlice";
 import { setCredentials } from "../redux/slices/authSlice";
-import { useRef,useEffect } from "react";
-import CryptoJS from 'crypto-js';
+import { useEffect } from "react";
 
-const Login = () => {
-  console.log("Login called")
+const Signup = () => {
+  console.log("Signup called")
   const { user } = useSelector((state) => state.auth);
   const {
     register,
@@ -20,86 +20,33 @@ const Login = () => {
   } = useForm();
 
   const navigate = useNavigate();
-  const location = useLocation();
   const dispatch = useDispatch();
-  const [login, { isLoading }] = useLoginMutation();
+  const [changeUserPassword, { isLoading }] = useChangePasswordMutation();
 
   const handleLogin = async (data) => {
     try {
-      const res = await login(data).unwrap();
+    //   const res = await login(data).unwrap();
 
-      dispatch(setCredentials(res));
-      // console.log(JSON.parse(localStorage.getItem("userInfo"))._id)
-      const redirectTo = new URLSearchParams(window.location.search).get('redirect')||null;
-      // console.log("RedirectUrl-->",redirectTo)
-      sessionStorage.setItem("hasRedirected", "false");
-      if(redirectTo){
-        localStorage.setItem("redirectUrl",redirectTo)
-        const encrypted = encryptPayload(JSON.parse(localStorage.getItem("userInfo")));
-        const encoded = encodeURIComponent(encrypted);
-        window.location.href =redirectTo+`?token=${encoded}`;
-      }else{
-        navigate("/");
-      }
-      // window.location.reload();
+    //   dispatch(setCredentials(res));
+      navigate("/");
     } catch (err) {
       toast.error(err?.data?.message || err.error);
     }
   };
-  function encryptPayload(data) {
-    // console.log("Data-->",data,import.meta.env.VITE_APP_ENCRYPT_KEY)
-    const secret = import.meta.env.VITE_APP_ENCRYPT_KEY//"74f32b18988211ff3ce7e1206c5df9811ba7ee25ec828ca4381e68ce802e1e1e";
-    const key = CryptoJS.enc.Hex.parse(secret);
-    const iv = CryptoJS.lib.WordArray.random(16);
-  
-    const encrypted = CryptoJS.AES.encrypt(JSON.stringify(data), key, {
-      iv,
-      mode: CryptoJS.mode.CBC,
-      padding: CryptoJS.pad.Pkcs7,
-    });
-  
-    const ivBase64 = CryptoJS.enc.Base64.stringify(iv);
-    const cipherBase64 = encrypted.toString();
-  
-    return `${ivBase64}:${cipherBase64}`;
-  }
   const handleSignUp = async (data) => {
     try {
-      // const res = await login(data).unwrap();
+        const res = await changeUserPassword(data).unwrap();
+        toast.success("Password change successfully");
 
       // dispatch(setCredentials(res));
-      navigate("/forgetPassword");
+      navigate("/log-in");
     } catch (err) {
       toast.error(err?.data?.message || err.error);
     }
   };
-  const hasNavigated = useRef(false);
+
   useEffect(() => {
-    if (!user || hasNavigated.current) return;
-    const redirectTo = localStorage.getItem("redirectUrl")||null;
-    // console.log("RedirectUrl use effect-->",localStorage.getItem("redirectUrl"),user)
-    // if(user){
-      const encrypted = encryptPayload(user);
-      const encoded = encodeURIComponent(encrypted);
-    // }
-    hasNavigated.current = true;
-    const hasRedirected = sessionStorage.getItem("hasRedirected") === "true";
-    // console.log("hasRedirected",hasRedirected)
-    if (hasRedirected) return;
-    sessionStorage.setItem("hasRedirected", "true");
-    if (redirectTo) {
-      const isExternal = redirectTo.startsWith("http");
-      const cleanedURL = location.pathname;
-      window.history.replaceState({}, "", cleanedURL);
-      // console.log(redirectTo,isExternal)
-      if (isExternal) {
-        window.location.href = localStorage.getItem("redirectUrl")+`?token=${encoded}`;
-      } else {
-        navigate(localStorage.getItem("redirectUrl")+`?token=${encoded}`, { replace: true });
-      }
-    }else{
-      user && navigate("/dashboard", { replace: true });
-    }
+    user && navigate("/dashboard");
   }, [user]);
 
   return (
@@ -123,7 +70,7 @@ const Login = () => {
 
         <div className='w-full md:w-1/3 p-4 md:p-1 flex flex-col justify-center items-center'>
           <form
-            onSubmit={handleSubmit(handleLogin)}
+            onSubmit={handleSubmit(handleSignUp)}
             className='form-container w-full md:w-[400px] flex flex-col gap-y-8 bg-white dark:bg-slate-900 px-10 pt-14 pb-14'
           >
             <div>
@@ -131,7 +78,7 @@ const Login = () => {
                 Welcome back!
               </p>
               <p className='text-center text-base text-gray-700 dark:text-gray-500'>
-                Keep all your credetials safe!
+                Change your password Here!
               </p>
             </div>
             <div className='flex flex-col gap-y-5'>
@@ -150,27 +97,27 @@ const Login = () => {
                 placeholder='password'
                 type='password'
                 name='password'
-                label='Password'
+                label='Type new Password'
                 className='w-full rounded-full'
                 register={register("password", {
                   required: "Password is required!",
                 })}
                 error={errors.password ? errors.password?.message : ""}
               />
-              <span className='text-sm text-gray-600 hover:underline cursor-pointer' onClick={handleSignUp}>
+              {/* <span className='text-sm text-gray-600 hover:underline cursor-pointer' onClick={handleLogin}>
                 Forget Password?
-              </span>
+              </span> */}
             </div>
             {isLoading ? (
               <Loading />
             ) : (
               <Button
                 type='submit'
-                label='Log in'
+                label='Change Password'
                 className='w-full h-10 bg-blue-700 text-white rounded-full'
               />
             )}
-            {/* <p className='text-center text-base text-gray-700 dark:text-gray-500'>Not Registered?<span className='text-sm text-gray-600 hover:underline cursor-pointer' onClick={handleSignUp}>&nbsp;Sign Up</span></p> */}
+            <p className='text-center text-base text-gray-700 dark:text-gray-500'>Already a user?<span className='text-sm text-gray-600 hover:underline cursor-pointer' onClick={handleLogin}>&nbsp;Log in</span></p>
           </form>
         </div>
       </div>
@@ -178,4 +125,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;

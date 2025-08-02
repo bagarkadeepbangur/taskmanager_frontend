@@ -25,6 +25,7 @@ const UserAvatar = () => {
       dispatch(logout());
 
       navigate("/log-in");
+      window.location.reload();
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
     }

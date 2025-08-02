@@ -41,7 +41,6 @@ const Card = ({ label, count, bg, icon }) => {
 const Dashboard = () => {
   const { data, isLoading, error } = useGetDasboardStatsQuery();
   const { user } = useSelector((state) => state.auth);
-
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   }, []);
@@ -91,7 +90,7 @@ const Dashboard = () => {
       <>
         <div className='grid grid-cols-1 md:grid-cols-4 gap-5'>
           {stats?.map(({ icon, bg, label, total }, index) => (
-            <Card key={index} icon={icon} bg={bg} label={label} count={total} />
+            <Card key={index} icon={icon} bg={bg} label={label} count={total||0} />
           ))}
         </div>
 

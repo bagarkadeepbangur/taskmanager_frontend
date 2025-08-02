@@ -10,6 +10,7 @@ import { Button, Loading, ModalWrapper, Textbox } from "./";
 
 const AddUser = ({ open, setOpen, userData }) => {
   let defaultValues = userData ?? {};
+  // console.log("Default-->",defaultValues)
   const { user } = useSelector((state) => state.auth);
 
   const {
@@ -32,9 +33,11 @@ const AddUser = ({ open, setOpen, userData }) => {
           dispatch(setCredentials({ ...res?.user }));
         }
       } else {
+        // console.log(JSON.parse(localStorage.getItem("userInfo")).organization)
         const res = await addNewUser({
           ...data,
           password: data?.email,
+          organization:JSON.parse(localStorage.getItem("userInfo")).organization
         }).unwrap();
         toast.success("New User added successfully");
       }

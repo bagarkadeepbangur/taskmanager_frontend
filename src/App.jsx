@@ -7,6 +7,7 @@ import { Toaster } from "sonner";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar"
 import Login from './pages/Login';
+import Signup from './pages/Signup';
 import Dashboard from "./pages/Dashboard";
 import Tasks from "./pages/Tasks";
 import Users from "./pages/Users";
@@ -119,6 +120,7 @@ const App = () => {
           </Route>
 
           <Route path='/log-in' element={<Login />} />
+          <Route path='/forgetPassword' element={<Signup />} />
         </Routes>
       </div>
 
