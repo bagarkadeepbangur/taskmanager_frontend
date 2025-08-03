@@ -88,7 +88,7 @@ const Login = () => {
     if (hasRedirected) return;
     sessionStorage.setItem("hasRedirected", "true");
     if (redirectTo) {
-      const isExternal = redirectTo.startsWith("http");
+      const isExternal = redirectTo.startsWith("https");
       const cleanedURL = location.pathname;
       window.history.replaceState({}, "", cleanedURL);
       // console.log(redirectTo,isExternal)
