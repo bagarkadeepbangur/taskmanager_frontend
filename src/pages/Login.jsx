@@ -77,7 +77,7 @@ const Login = () => {
   useEffect(() => {
     if (!user || hasNavigated.current) return;
     const redirectTo = localStorage.getItem("redirectUrl")||null;
-    // console.log("RedirectUrl use effect-->",localStorage.getItem("redirectUrl"),user)
+    console.log("RedirectUrl use effect-->",localStorage.getItem("redirectUrl"))
     // if(user){
       const encrypted = encryptPayload(user);
       const encoded = encodeURIComponent(encrypted);
@@ -95,7 +95,8 @@ const Login = () => {
       if (isExternal) {
         window.location.href = localStorage.getItem("redirectUrl")+`?token=${encoded}`;
       } else {
-        navigate(localStorage.getItem("redirectUrl")+`?token=${encoded}`, { replace: true });
+        // navigate(localStorage.getItem("redirectUrl")+`?token=${encoded}`, { replace: true });
+        window.location.href = localStorage.getItem("redirectUrl")+`?token=${encoded}`;
       }
     }else{
       user && navigate("/dashboard", { replace: true });
